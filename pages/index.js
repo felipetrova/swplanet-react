@@ -12,24 +12,25 @@ const Index = () => {
   const [planet, setPlanet] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-
+  
   const loadPlanet = useCallback(async () => {
-    try {
-      setLoading(true);
-      setErrorMsg("");
+    const idPlanet = Math.floor(Math.random() * 60);
 
-      const idPlanet = Math.floor(Math.random() * 60);
-
-      const response = await API.get(`planets/${idPlanet}/`);
-      console.log(response);
-
-      setPlanet(response.data);
-
-      if (response.data.length === 0) {
+    if(idPlanet !== 0) {
+      try {
+        setLoading(true);
+        setErrorMsg("");
+        
+        const response = await API.get(`planets/${idPlanet}/`);
+        
+        setPlanet(response.data);
+  
+        if (response.data.length === 0) {
+          setErrorMsg("Nenhum planeta encontrado. Favor tentar novamente.");
+        }
+      } catch (error) {
         setErrorMsg("Nenhum planeta encontrado. Favor tentar novamente.");
       }
-    } catch (error) {
-      setErrorMsg("Nenhum planeta encontrado. Favor tentar novamente.");
     }
 
     setLoading(false);
@@ -67,7 +68,6 @@ const Index = () => {
                 climate={planet.climate}
                 terrain={planet.terrain}
                 population={planet.population}
-                films={planet.films}
                 changePlanet={e => changePlanet(planet.url, e)}
               />
             </GridStyle.Col>
